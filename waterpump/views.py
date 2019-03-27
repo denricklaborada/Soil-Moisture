@@ -17,7 +17,36 @@ def run_mqtt():
     client.on_connect = on_connect
     client.on_message = on_message
 
-    client.connect("10.200.180.6", 1883, 60)
+    client.connect("10.200.180.7", 1883, 60)
     client.loop_forever()
 
 t1 = Thread(target=run_mqtt).start()
+
+def index(request):
+	template_name = 'waterpump/index.html'
+	nodes = Node.objects.all()
+	contents = {}
+	nums = []
+	
+	for node in nodes:
+		if not node.node_id in nums:
+			nums.append(node.node_id)
+	
+	nums.sort()
+	
+	for num in nums:
+		obj = Node.objects.filter(node_id=num).order_by('-id')[0]
+		content = {
+			str(num):str(obj.moisture),
+		}
+		
+		contents.update(content)
+	
+	context = {
+		'contents':contents,
+	}
+	
+	return render(request, template_name, context)
+
+
+

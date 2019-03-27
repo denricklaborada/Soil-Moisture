@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>LBY-IOT</title>
+	</head>
+
+	<body>
+		<div>
+			{% for node_id, moisture in contents.items %}
+				<div>
+					<p>Node {{ node_id }}: {{ moisture }}%</p>
+				</div>
+			{% endfor %}
+		</div>
+	</body>
+</html>
