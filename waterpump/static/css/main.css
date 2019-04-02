@@ -1,0 +1,29 @@
+
+@font-face {
+	font-family: 'Proxima-Nova';
+	src: url('../fonts/ProximaNova-Regular.otf') format("opentype");
+}
+
+@font-face {
+	font-family: 'Proxima-Nova-Bold';
+	src: url('../fonts/ProximaNova-Bold.otf') format("opentype");
+}
+
+:root {
+    font-family: 'Proxima-Nova', sans-serif;
+}
+
+body {
+    padding-top: 1em;
+}
+
+.wrapper {
+    width: 60em;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.chartWrapper {
+    width: 20px;
+    overflow-x: scroll;
+}

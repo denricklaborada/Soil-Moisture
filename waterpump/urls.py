@@ -5,4 +5,6 @@ app_name = 'waterpump'
 
 urlpatterns = [
 	path('', views.index, name='index'),
+	path('node/<int:node_id>/', views.nodePage, name='nodePage'),
+	path('<int:node_id>/', views.contentPage, name='contentPage'),
 ]

@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html>
 	<head>
+        <meta charset="UTF-8">
 		<title>LBY-IOT</title>
 	</head>
 
 	<body>
 		<div>
+			<h3>Current:</h3>
 			{% for node_id, moisture in contents.items %}
 				<div>
-					<p>Node {{ node_id }}: {{ moisture }}%</p>
+                    <p><a href="{% url 'waterpump:contentPage' node_id %}">Node {{ node_id }}</a>: {{ moisture }}%</p>
 				</div>
 			{% endfor %}
 		</div>
