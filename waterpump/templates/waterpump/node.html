@@ -1,108 +1,104 @@
-{% load static %}
+{% extends 'waterpump/base.html' %}
 {% load filter_tags %}
 
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Node {{ node_id }}</title>
-        <link rel="stylesheet" href="{% static 'css/main.css' %}">
-        <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-        <script src="{% static 'js/Chart.min.js' %}"></script>
-    </head>
-    <body>
-        <a href="/">< Go back</a>
-        <div class="wrapper">
-            <h3>Node {{ node_id }} Moisture (Today)</h3>
-            <div class="chartWrapper">
-                <canvas id="myChart" width="10"></canvas>
-            </div>
+{% block title %}Node {{ node_id }} ({{ node_day }}){% endblock %}
+{% block body %}
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="{% url 'waterpump:contentPage' node_id %}">Node {{ node_id }}</a></li>
+                <li class="breadcrumb-item active" aria-current="page">{{ node_day }}</li>
+            </ol>
+        </nav>
+        <h3>Node {{ node_id }} Moisture ({{ node_day }})</h3>
+        <div class="chartWrapper">
+            <canvas id="myChart"></canvas>
         </div>
+    </div>
 
-        <script>
-            new Chart($("#myChart"), {
-                type: 'line',
-                data: {
-                    labels: [
-                        '0',
-                        '1AM',
-                        '2AM',
-                        '3AM',
-                        '4AM',
-                        '5AM',
-                        '6AM',
-                        '7AM',
-                        '8AM',
-                        '9AM',
-                        '10AM',
-                        '11AM',
-                        '12NN',
-                        '1PM',
-                        '2PM',
-                        '3PM',
-                        '4PM',
-                        '5PM',
-                        '6PM',
-                        '7PM',
-                        '8PM',
-                        '9PM',
-                        '10PM',
-                        '11PM'
+    <script>
+        new Chart($("#myChart"), {
+            type: 'line',
+            data: {
+                labels: [
+                    '12MN',
+                    '1AM',
+                    '2AM',
+                    '3AM',
+                    '4AM',
+                    '5AM',
+                    '6AM',
+                    '7AM',
+                    '8AM',
+                    '9AM',
+                    '10AM',
+                    '11AM',
+                    '12NN',
+                    '1PM',
+                    '2PM',
+                    '3PM',
+                    '4PM',
+                    '5PM',
+                    '6PM',
+                    '7PM',
+                    '8PM',
+                    '9PM',
+                    '10PM',
+                    '11PM'
+                ],
+                datasets: [{
+                    data: [
+                        {% custom node '00:00' '01:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '01:00' '02:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '02:00' '03:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '03:00' '04:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '04:00' '05:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '05:00' '06:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '06:00' '07:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '07:00' '08:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '08:00' '09:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '09:00' '10:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '10:00' '11:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '11:00' '12:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '12:00' '13:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '13:00' '14:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '14:00' '15:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '15:00' '16:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '16:00' '17:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '17:00' '18:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '18:00' '19:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '19:00' '20:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '20:00' '21:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '21:00' '22:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '22:00' '23:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                        {% custom node '23:00' '23:59' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
                     ],
-                    datasets: [{
-                        data: [
-                            {% filter_tag node '00:00' '01:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '01:00' '02:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '02:00' '03:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '03:00' '04:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '04:00' '05:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '05:00' '06:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '06:00' '07:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '07:00' '08:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '08:00' '09:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '09:00' '10:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '10:00' '11:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '11:00' '12:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '12:00' '13:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '13:00' '14:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '14:00' '15:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '15:00' '16:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '16:00' '17:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '17:00' '18:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '18:00' '19:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '19:00' '20:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '20:00' '21:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '21:00' '22:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '22:00' '23:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                            {% filter_tag node '23:00' '23:59' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
-                        ],
-                        label: "Node {{ node_id }}",
-                        borderColor: "#3e95cd",
-                        pointBackgroundColor: '#3e95cd',
-                        backgroundColor: 'rgba(60, 149, 205, 0.3)',
-                        radius: 5,
-                        hoverRadius: 5,
-                        fill: true,
-                        pointStyle: 'circle',
-                        tension: 0,
-                    }]
+                    borderColor: "#3e95cd",
+                    pointBackgroundColor: '#3e95cd',
+                    backgroundColor: 'rgba(60, 149, 205, 0.3)',
+                    radius: 5,
+                    hoverRadius: 5,
+                    fill: true,
+                    pointStyle: 'circle',
+                    tension: 0,
+                }]
+            },
+            options: {
+                legend: {
+                    display: false
                 },
-                options: {
-                    legend: {
-                        display: false
-                    },
-                    scales: {
-                        yAxes: [{
-                            display: true,
-                            ticks: {
-                                callback: function(value) {
-                                    return value + "%";
-                                }
+                scales: {
+                    yAxes: [{
+                        display: true,
+                        ticks: {
+                            callback: function(value) {
+                                return value + "%";
                             }
-                        }]
-                    }
+                        }
+                    }]
                 }
-            });
-        </script>
-    </body>
-</html>
+            }
+        });
+    </script>
+{% endblock %}

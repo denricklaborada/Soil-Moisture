@@ -2,6 +2,7 @@ from django.shortcuts import render
 import paho.mqtt.client as mqtt
 from .models import *
 import datetime
+from django.utils import timezone
 from threading import Thread
 
 
@@ -45,7 +46,7 @@ def index(request):
     for num in nums:
         obj = Node.objects.filter(node_id=num).order_by('-id')[0]
         content = {
-            str(num): str(obj.moisture),
+            str(num): [str(obj.moisture), obj.timestamp],
         }
 
         contents.update(content)
@@ -58,22 +59,21 @@ def index(request):
         'nums': nums,
         'nodes': nodes,
         'maxData': range(maxData),
+        'date': timezone.now(),
     }
 
     return render(request, template_name, context)
 
 
-def nodePage(request, node_id):
+def nodePage(request, node_id, node_day):
     template_name = 'waterpump/node.html'
-    now = datetime.datetime.now()
     obj = Node.objects.filter(node_id=node_id,
-                              timestamp__date=datetime.date(now.year, now.month, now.day))
-
-    print(now)
+                              timestamp__date=datetime.date(int(node_day[:4]), int(node_day[6:7]), int(node_day[8:10])))
 
     context = {
         'node': obj,
         'node_id': node_id,
+        'node_day': node_day,
     }
 
     return render(request, template_name, context)
@@ -83,8 +83,14 @@ def contentPage(request, node_id):
     template_name = 'waterpump/content.html'
     obj = Node.objects.filter(node_id=node_id).order_by('-id')
 
+    dates = []
+
+    for n in obj:
+        if str(timezone.localtime(n.timestamp))[:10] not in dates:
+            dates.append(str(timezone.localtime(n.timestamp))[:10])
+
     context = {
-        'values': obj,
+        'values': dates,
         'node_id': node_id,
     }
 

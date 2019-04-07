@@ -1,18 +1,116 @@
-<!DOCTYPE html>
-<html>
-	<head>
-        <meta charset="UTF-8">
-		<title>LBY-IOT</title>
-	</head>
+{% extends 'waterpump/base.html' %}
+{% load filter_tags %}
 
-	<body>
-		<div>
-			<h3>Current:</h3>
-			{% for node_id, moisture in contents.items %}
-				<div>
-                    <p><a href="{% url 'waterpump:contentPage' node_id %}">Node {{ node_id }}</a>: {{ moisture }}%</p>
-				</div>
-			{% endfor %}
-		</div>
-	</body>
-</html>
+{% block title %}Soil Moisture{% endblock %}
+{% block body %}
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item active" aria-current="page">Home</li>
+            </ol>
+        </nav>
+        <h3>Today ({{ date|date:'F j, Y' }})</h3>
+        <div class="row">
+            {% for node_id, moisture in contents.items %}
+                <div class="col-6 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <a href="{% url 'waterpump:contentPage' node_id %}">
+                                <h5 class="card-title">Node {{ node_id }}</h5>
+                            </a>
+                            <canvas id="chart{{ node_id }}"></canvas>
+                            <p class="card-text">Latest moisture: {{ moisture.0 }}%</p>
+                        </div>
+                        <div class="card-footer">
+                            <small class="text-muted">Last updated on {{ moisture.1|date:'F j, Y h:i A' }}</small>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    new Chart($("#chart{{ node_id }}"), {
+                        type: 'line',
+                        data: {
+                            labels: [
+                                '12MN',
+                                '1AM',
+                                '2AM',
+                                '3AM',
+                                '4AM',
+                                '5AM',
+                                '6AM',
+                                '7AM',
+                                '8AM',
+                                '9AM',
+                                '10AM',
+                                '11AM',
+                                '12NN',
+                                '1PM',
+                                '2PM',
+                                '3PM',
+                                '4PM',
+                                '5PM',
+                                '6PM',
+                                '7PM',
+                                '8PM',
+                                '9PM',
+                                '10PM',
+                                '11PM'
+                            ],
+                            datasets: [{
+                                data: [
+                                    {% today node_id '00:00' '01:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '01:00' '02:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '02:00' '03:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '03:00' '04:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '04:00' '05:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '05:00' '06:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '06:00' '07:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '07:00' '08:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '08:00' '09:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '09:00' '10:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '10:00' '11:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '11:00' '12:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '12:00' '13:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '13:00' '14:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '14:00' '15:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '15:00' '16:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '16:00' '17:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '17:00' '18:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '18:00' '19:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '19:00' '20:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '20:00' '21:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '21:00' '22:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '22:00' '23:00' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                    {% today node_id '23:00' '23:59' as val %}{% if not val == -1 %}{{ val }}{% else %}null{% endif %},
+                                ],
+                                borderColor: "#3e95cd",
+                                pointBackgroundColor: '#3e95cd',
+                                backgroundColor: 'rgba(60, 149, 205, 0.3)',
+                                radius: 5,
+                                hoverRadius: 5,
+                                fill: true,
+                                pointStyle: 'circle',
+                                tension: 0,
+                            }]
+                        },
+                        options: {
+                            legend: {
+                                display: false
+                            },
+                            scales: {
+                                yAxes: [{
+                                    display: true,
+                                    ticks: {
+                                        callback: function(value) {
+                                            return value + "%";
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    });
+                </script>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

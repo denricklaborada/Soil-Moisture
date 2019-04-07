@@ -1,31 +1,19 @@
-{% load static %}
+{% extends 'waterpump/base.html' %}
 
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <title>Node {{ node_id }}</title>
-        <script src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-        <style>
-            table, th, td {
-                border: 1px solid black;
-            }
-        </style>
-    </head>
-    <body>
-        <a href="/">Go back</a>
+{% block title %}Node {{ node_id }}{% endblock %}
+{% block body %}
+    <div class="container">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Node {{ node_id }}</li>
+            </ol>
+        </nav>
         <h3>Node {{ node_id }}</h3>
-        <table id="tb">
-            <tr>
-                <th>Moisture %</th>
-                <th>Timestamp</th>
-            </tr>
+        <div class="list-group">
             {% for val in values %}
-                <tr>
-                    <td>{{ val.moisture }}%</td>
-                    <td>{{ val.timestamp|date:'Y-m-d h:i A' }}</td>
-                </tr>
+                <a href="{% url 'waterpump:nodePage' node_id val %}" class="list-group-item list-group-item-action">{{ val }}</a>
             {% endfor %}
-        </table>
-    </body>
-</html>
+        </div>
+    </div>
+{% endblock %}
