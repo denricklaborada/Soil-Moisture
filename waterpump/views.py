@@ -35,10 +35,9 @@ def index(request):
     nodes = Node.objects.all()
     contents = {}
     nums = []
-    maxData = 0
 
     for node in nodes:
-        if not node.node_id in nums:
+        if node.node_id not in nums:
             nums.append(node.node_id)
 
     nums.sort()
@@ -50,15 +49,9 @@ def index(request):
         }
 
         contents.update(content)
-        objCount = Node.objects.count()
-        if maxData < objCount:
-            maxData = objCount
 
     context = {
         'contents': contents,
-        'nums': nums,
-        'nodes': nodes,
-        'maxData': range(maxData),
         'date': timezone.now(),
     }
 

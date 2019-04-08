@@ -86,8 +86,6 @@
                                 borderColor: "#3e95cd",
                                 pointBackgroundColor: '#3e95cd',
                                 backgroundColor: 'rgba(60, 149, 205, 0.3)',
-                                radius: 5,
-                                hoverRadius: 5,
                                 fill: true,
                                 pointStyle: 'circle',
                                 tension: 0,
@@ -101,6 +99,9 @@
                                 yAxes: [{
                                     display: true,
                                     ticks: {
+                                        beginAtZero: true,
+                                        stepSize: 20,
+                                        max: 100,
                                         callback: function(value) {
                                             return value + "%";
                                         }
